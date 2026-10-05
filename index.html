@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ofertas Comerciales | MEICO Occidente</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #063b83;
+      --primary-hover: #0a5ab8;
+      --accent: #2563eb;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --radius: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px -2px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; -webkit-tap-highlight-color: transparent; }
+
+    /* Header Sticky con Blur */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(6, 59, 131, 0.95);
+      backdrop-filter: blur(8px);
+      color: #fff; padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: var(--shadow-md);
+    }
+    header .brand { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    header .admin-btn {
+      background: rgba(255,255,255,0.15); border: none; color: #fff;
+      padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    header .admin-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* Barra de Búsqueda Fija */
+    .search-container {
+      max-width: 640px; margin: 16px auto 0 auto; padding: 0 16px;
+    }
+    .search-bar {
+      width: 100%; padding: 12px 16px 12px 42px; border: 1px solid var(--border);
+      border-radius: 12px; font-size: 0.95rem; background: var(--surface);
+      box-shadow: var(--shadow-sm); outline: none; transition: all 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: 12px center; background-size: 20px;
+    }
+    .search-bar:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+
+    .container { max-width: 640px; margin: 16px auto; padding: 0 16px; }
+
+    /* Panel Admin */
+    .admin-panel {
+      background: #fffbe3; border: 1px solid #fef08a; padding: 18px;
+      border-radius: var(--radius); margin-bottom: 20px; display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .admin-panel h3 { font-size: 1rem; color: #854d0e; margin-bottom: 8px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;
+    }
+
+    /* Grid de Tarjetas */
+    .offers-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+    /* Card Component */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease; overflow: hidden;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .card-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); line-height: 1.3; }
+    .badge {
+      background: #e0e7ff; color: #3730a3; font-size: 0.72rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 12px; text-transform: uppercase;
+    }
+
+    /* Media Image */
+    .card-img-wrapper {
+      width: 100%; border-radius: 10px; overflow: hidden; background: #f1f5f9;
+      cursor: pointer; position: relative; margin-top: 10px;
+    }
+    .card-img-wrapper img { width: 100%; height: auto; display: block; object-fit: cover; transition: transform 0.3s ease; }
+    .card-img-wrapper:hover img { transform: scale(1.02); }
+
+    /* Detalle Texto / Escalas */
+    .card-body-text {
+      font-size: 0.9rem; line-height: 1.5; color: var(--text); white-space: pre-line; margin-top: 8px;
+    }
+
+    /* Botones de Acción */
+    .btn-group { display: flex; gap: 8px; margin-top: 14px; }
+    .btn {
+      flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: 600;
+      font-size: 0.85rem; cursor: pointer; transition: background 0.2s; text-align: center;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-danger { background: #fee2e2; color: var(--danger); }
+    .btn-danger:hover { background: #fca5a5; }
+
+    /* Skeleton Loader */
+    .skeleton-card {
+      height: 180px; background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: var(--radius);
+    }
+    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Lightbox Modal */
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000;
+      display: none; align-items: center; justify-content: center; padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .modal img { max-width: 100%; max-height: 90vh; border-radius: 8px; box-shadow: var(--shadow-lg); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; color: #fff; font-size: 2rem;
+      cursor: pointer; font-weight: bold; width: 40px; height: 40px; text-align: center; line-height: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">MEICO | Occidente</div>
+  <button class="admin-btn" onclick="App.toggleAdmin()">⚙️️ Edición</button>
+</header>
+
+<div class="search-container">
+  <input type="text" id="searchInput" class="search-bar" placeholder="Buscar por producto, marca o escala..." oninput="App.filterOffers()">
+</div>
+
+<div class="container">
+  
+  <!-- Admin Panel -->
+  <div id="adminPanel" class="admin-panel">
+    <h3>⚙️ Gestión Local de Ofertas</h3>
+    <input type="hidden" id="editIndex" value="">
+    <div class="form-group">
+      <label>Título de la Oferta / Producto</label>
+      <input type="text" id="inputTitle" placeholder="Ej: Breakers Luminex / Legrand">
+    </div>
+    <div class="form-group">
+      <label>Descripción / Escala de Precios</label>
+      <textarea id="inputDesc" rows="3" placeholder="Ej: 1 caja x144 unds -> 5% dcto"></textarea>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="App.saveLocalOffer()">Guardar</button>
+      <button class="btn" style="background:#e2e8f0; color:var(--text);" onclick="App.resetForm()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Contenedor Principal de Ofertas -->
+  <div id="offersContainer" class="offers-grid">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+
+</div>
+
+<!-- Modal Fullscreen para Imágenes -->
+<div id="imageModal" class="modal" onclick="App.closeLightbox()">
+  <span class="modal-close">&times;</span>
+  <img id="modalImg" src="" alt="Vista ampliada">
+</div>
+
+<script>
+  /**
+   * Application Controller Pattern (ES6)
+   */
+  const App = {
+    // ⚠️️ Reemplaza esta URL con la tuya desplegada en Google Apps Script
+    API_URL: "https://script.google.com/macros/s/AKfycbzBJ5FqipeiX-A_UMUjyE0M5CDOlCjOmR2BXxbUAdeaoQbHLu3bIqk-PIqzabSmI3OIAw/exec",
+    
+    state: {
+      offers: [],
+      filtered: [],
+      isAdmin: false
+    },
+
+    defaultOffers: [
+      {
+        id: "def-1",
+        titulo: "Cerradura Digital ASSA ABLOY",
+        desc: "Escala 1: 1 a 5 unds - $450.000 c/u\nEscala 2: 6 a 12 unds - $420.000 c/u\nEscala 3: 13+ unds - $390.000 c/u",
+        tipo: "texto"
+      },
+      {
+        id: "def-2",
+        titulo: "Cierra Puertas Hidráulico",
+        desc: "Mayorista (1-10 unds): $120.000\nDistribuidor (11+ unds): $105.000",
+        tipo: "texto"
+      }
+    ],
+
+    async init() {
+      await this.loadOffers();
+      this.render();
+    },
+
+    async loadOffers() {
+      let remoteData = [];
+      try {
+        if (this.API_URL && !this.API_URL.includes("AKfycbx...")) {
+          const res = await fetch(this.API_URL);
+          const data = await res.json();
+          remoteData = data.ofertas || [];
+        }
+      } catch (err) {
+        console.warn("API no disponible o usando modo local/offline:", err);
+      }
+
+      // Combinar ofertas de Google Drive / API con el localStorage local
+      const savedLocal = JSON.parse(localStorage.getItem('meico_offers_v2')) || this.defaultOffers;
+      
+      this.state.offers = [...remoteData, ...savedLocal];
+      this.state.filtered = [...this.state.offers];
+    },
+
+    render() {
+      const container = document.getElementById('offersContainer');
+      
+      if (this.state.filtered.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:30px 0;">No se encontraron ofertas vigentes.</p>`;
+        return;
+      }
+
+      container.innerHTML = this.state.filtered.map((item, index) => {
+        const isImage = item.imagenUrl || item.tipo === 'imagen';
+        
+        return `
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">${item.titulo || item.title}</h3>
+              <span class="badge">${isImage ? 'Promoción' : 'Escala'}</span>
+            </div>
+
+            ${isImage ? `
+              <div class="card-img-wrapper" onclick="App.openLightbox('${item.imagenUrl}')">
+                <img src="${item.imagenUrl}" alt="${item.titulo}" loading="lazy">
+              </div>
+            ` : ''}
+
+            ${item.desc ? `
+              <div class="card-body-text">${this.escapeHTML(item.desc)}</div>
+            ` : ''}
+
+            ${this.state.isAdmin ? `
+              <div class="btn-group">
+                <button class="btn btn-primary" onclick="App.editOffer(${index})">Editar</button>
+                <button class="btn btn-danger" onclick="App.deleteOffer(${index})">Eliminar</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    },
+
+    filterOffers() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      this.state.filtered = this.state.offers.filter(o => {
+        const title = (o.titulo || o.title || '').toLowerCase();
+        const desc = (o.desc || '').toLowerCase();
+        return title.includes(q) || desc.includes(q);
+      });
+      this.render();
+    },
+
+    toggleAdmin() {
+      this.state.isAdmin = !this.state.isAdmin;
+      document.getElementById('adminPanel').style.display = this.state.isAdmin ? 'block' : 'none';
+      this.render();
+    },
+
+    saveLocalOffer() {
+      const title = document.getElementById('inputTitle').value.trim();
+      const desc = document.getElementById('inputDesc').value.trim();
+      const editIndex = document.getElementById('editIndex').value;
+
+      if (!title) return alert("Ingresa al menos un título para la oferta.");
+
+      let localOffers = JSON.parse(localStorage.getItem('meico_offers_v2')) || this.defaultOffers;
+
+      if (editIndex === "") {
+        localOffers.unshift({ id: Date.now().toString(), titulo: title, desc: desc, tipo: 'texto' });
+      } else {
+        localOffers[editIndex] = { ...localOffers[editIndex], titulo: title, desc: desc };
+      }
+
+      localStorage.setItem('meico_offers_v2', JSON.stringify(localOffers));
+      this.resetForm();
+      this.init();
+    },
+
+    editOffer(index) {
+      const item = this.state.filtered[index];
+      document.getElementById('inputTitle').value = item.titulo || item.title;
+      document.getElementById('inputDesc').value = item.desc || '';
+      document.getElementById('editIndex').value = index;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    deleteOffer(index) {
+      if (confirm('¿Deseas eliminar esta oferta local?')) {
+        let localOffers = JSON.parse(localStorage.getItem('meico_offers_v2')) || this.defaultOffers;
+        localOffers.splice(index, 1);
+        localStorage.setItem('meico_offers_v2', JSON.stringify(localOffers));
+        this.init();
+      }
+    },
+
+    resetForm() {
+      document.getElementById('inputTitle').value = '';
+      document.getElementById('inputDesc').value = '';
+      document.getElementById('editIndex').value = '';
+    },
+
+    openLightbox(url) {
+      document.getElementById('modalImg').src = url;
+      document.getElementById('imageModal').style.display = 'flex';
+    },
+
+    closeLightbox() {
+      document.getElementById('imageModal').style.display = 'none';
+    },
+
+    escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  };
+
+  window.onload = () => App.init();
+</script>
+
+</body>
+</html>
